@@ -40,19 +40,40 @@ class BsmModel:
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        div_fac = np.exp(-texp*self.divr)
+        disc_fac = np.exp(-texp*self.intr)
+        forward = spot / disc_fac * div_fac
+        
+        vol_std = self.vol*np.sqrt(texp)
+        d1 = np.log(forward/strike)/vol_std + 0.5*vol_std
+        
+        return ss.norm.cdf(d1) - 0.5 * (1-cp_sign)
 
     def vega(self, strike, spot, vol, texp, cp_sign=1):
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        div_fac = np.exp(-texp*self.divr)
+        disc_fac = np.exp(-texp*self.intr)
+        forward = spot / disc_fac * div_fac
+        
+        vol_std = self.vol*np.sqrt(texp)
+        d1 = np.log(forward/strike)/vol_std + 0.5*vol_std
+        
+        return spot*np.sqrt(texp)*ss.norm.pdf(d1)
 
     def gamma(self, strike, spot, vol, texp, cp_sign=1):
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        div_fac = np.exp(-texp*self.divr)
+        disc_fac = np.exp(-texp*self.intr)
+        forward = spot / disc_fac * div_fac
+        
+        vol_std = self.vol*np.sqrt(texp)
+        d1 = np.log(forward/strike)/vol_std + 0.5*vol_std
+        
+        return ss.norm.pdf(d1)/(spot*np.sqrt(texp)*self.vol)
 
     def impvol(self, price, strike, spot, texp, cp_sign=1):
         iv_func = lambda _vol: \
