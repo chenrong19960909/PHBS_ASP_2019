@@ -36,16 +36,20 @@ class BsmModel:
     def price(self, strike, spot, texp, cp_sign=1):
         return bsm_formula(strike, spot, self.vol, texp, intr=self.intr, divr=self.divr, cp_sign=cp_sign)
     
-    def delta(self, strike, spot, texp, cp_sign=1):
-        ''' 
-        <-- PUT your implementation here
-        '''
+    def d1cal(self, strike, spot, texp):
         div_fac = np.exp(-texp*self.divr)
         disc_fac = np.exp(-texp*self.intr)
         forward = spot / disc_fac * div_fac
         
         vol_std = self.vol*np.sqrt(texp)
         d1 = np.log(forward/strike)/vol_std + 0.5*vol_std
+        return d1
+    
+    def delta(self, strike, spot, texp, cp_sign=1):
+        ''' 
+        <-- PUT your implementation here
+        '''
+        d1 = self.d1cal(self, strike, spot, texp)
         
         return ss.norm.cdf(d1) - 0.5 * (1-cp_sign)
 
@@ -53,12 +57,7 @@ class BsmModel:
         ''' 
         <-- PUT your implementation here
         '''
-        div_fac = np.exp(-texp*self.divr)
-        disc_fac = np.exp(-texp*self.intr)
-        forward = spot / disc_fac * div_fac
-        
-        vol_std = self.vol*np.sqrt(texp)
-        d1 = np.log(forward/strike)/vol_std + 0.5*vol_std
+        d1 = self.d1cal(self, strike, spot, texp)
         
         return spot*np.sqrt(texp)*ss.norm.pdf(d1)
 
@@ -66,12 +65,7 @@ class BsmModel:
         ''' 
         <-- PUT your implementation here
         '''
-        div_fac = np.exp(-texp*self.divr)
-        disc_fac = np.exp(-texp*self.intr)
-        forward = spot / disc_fac * div_fac
-        
-        vol_std = self.vol*np.sqrt(texp)
-        d1 = np.log(forward/strike)/vol_std + 0.5*vol_std
+        d1 = self.d1cal(self, strike, spot, texp)
         
         return ss.norm.pdf(d1)/(spot*np.sqrt(texp)*self.vol)
 

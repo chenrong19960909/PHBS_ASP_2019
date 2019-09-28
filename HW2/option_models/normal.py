@@ -34,42 +34,36 @@ class NormalModel:
     def price(self, strike, spot, texp, cp_sign=1):
         return normal_formula(strike, spot, self.vol, texp, intr=self.intr, divr=self.divr, cp_sign=cp_sign)
     
-    def delta(self, strike, spot, texp, intr=0.0, divr=0.0, cp_sign=1):
-        ''' 
-        <-- PUT your implementation here
-        '''
-        div_fac = np.exp(-texp*divr)
-        disc_fac = np.exp(-texp*intr)
+    def dcal(self, strike, spot, texp):
+        div_fac = np.exp(-texp*self.divr)
+        disc_fac = np.exp(-texp*self.intr)
         forward = spot / disc_fac * div_fac
 
         vol_std = np.fmax(self.vol * np.sqrt(texp), 1.0e-16)
         d = (forward - strike) / vol_std
+        return d
+    
+    def delta(self, strike, spot, texp, cp_sign=1):
+        ''' 
+        <-- PUT your implementation here
+        '''
+        d = self.dcal(self, strike, spot, texp)
         
         return cp_sign*ss.norm.cdf(cp_sign*d)
 
-    def vega(self, strike, spot, texp, intr=0.0, divr=0.0, cp_sign=1):
+    def vega(self, strike, spot, texp, cp_sign=1):
         ''' 
         <-- PUT your implementation here
         '''
-        div_fac = np.exp(-texp*divr)
-        disc_fac = np.exp(-texp*intr)
-        forward = spot / disc_fac * div_fac
-
-        vol_std = np.fmax(self.vol * np.sqrt(texp), 1.0e-16)
-        d = (forward - strike) / vol_std
+        d = self.dcal(self, strike, spot, texp)
         
         return ss.norm.pdf(d) * np.sqrt(texp)
 
-    def gamma(self, strike, spot, texp, intr=0.0, divr=0.0, cp_sign=1):
+    def gamma(self, strike, spot, texp, cp_sign=1):
         ''' 
         <-- PUT your implementation here
         '''
-        div_fac = np.exp(-texp*divr)
-        disc_fac = np.exp(-texp*intr)
-        forward = spot / disc_fac * div_fac
-
-        vol_std = np.fmax(self.vol * np.sqrt(texp), 1.0e-16)
-        d = (forward - strike) / vol_std
+        d = self.dcal(self, strike, spot, texp)
         
         return ss.norm.pdf(d) / (self.vol*np.sqrt(texp))
 
