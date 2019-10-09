@@ -47,7 +47,7 @@ class NormalModel:
         ''' 
         <-- PUT your implementation here
         '''
-        d = self.dcal(self, strike, spot, texp)
+        d = self.dcal(strike, spot, texp)
         
         return cp_sign*ss.norm.cdf(cp_sign*d)
 
@@ -55,7 +55,7 @@ class NormalModel:
         ''' 
         <-- PUT your implementation here
         '''
-        d = self.dcal(self, strike, spot, texp)
+        d = self.dcal(strike, spot, texp)
         
         return ss.norm.pdf(d) * np.sqrt(texp)
 
@@ -63,7 +63,7 @@ class NormalModel:
         ''' 
         <-- PUT your implementation here
         '''
-        d = self.dcal(self, strike, spot, texp)
+        d = self.dcal(strike, spot, texp)
         
         return ss.norm.pdf(d) / (self.vol*np.sqrt(texp))
 

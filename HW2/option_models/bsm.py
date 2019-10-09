@@ -49,23 +49,23 @@ class BsmModel:
         ''' 
         <-- PUT your implementation here
         '''
-        d1 = self.d1cal(self, strike, spot, texp)
+        d1 = self.d1cal(strike, spot, texp)
         
         return ss.norm.cdf(d1) - 0.5 * (1-cp_sign)
 
-    def vega(self, strike, spot, vol, texp, cp_sign=1):
+    def vega(self, strike, spot, texp, cp_sign=1):
         ''' 
         <-- PUT your implementation here
         '''
-        d1 = self.d1cal(self, strike, spot, texp)
+        d1 = self.d1cal(strike, spot, texp)
         
         return spot*np.sqrt(texp)*ss.norm.pdf(d1)
 
-    def gamma(self, strike, spot, vol, texp, cp_sign=1):
+    def gamma(self, strike, spot, texp, cp_sign=1):
         ''' 
         <-- PUT your implementation here
         '''
-        d1 = self.d1cal(self, strike, spot, texp)
+        d1 = self.d1cal(strike, spot, texp)
         
         return ss.norm.pdf(d1)/(spot*np.sqrt(texp)*self.vol)
 
